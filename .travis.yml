@@ -1,0 +1,30 @@
+dist: xenial
+language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+env:
+  - DJANGO=1.11.*
+  - DJANGO=2.0.*
+  - DJANGO=2.1.*
+  - DJANGO=2.2.*
+install:
+  - pip install Django==$DJANGO django-macros
+  - pip install codecov
+before_script:
+  - cd testapp
+script:
+  - coverage run --source=testapp manage.py test
+after_success:
+  - codecov
+matrix:
+  include:
+    - python: "2.7"
+      env: DJANGO=1.11.*
+  exclude:
+    - python: "3.4"
+      env: DJANGO=2.1.*
+    - python: "3.4"
+      env: DJANGO=2.2.*
